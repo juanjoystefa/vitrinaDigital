@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vitrina Digital</title>
+    <!-- Importamos Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Vitrina de Emprendimientos</h1>
+
+        <!-- Formulario Básico -->
+        <div class="card shadow-sm p-4 mb-5">
+            <h5 class="mb-3">Añadir Emprendimiento</h5>
+            <form method="POST">
+                {% csrf_token %} <!-- Django exige esto por seguridad en todos los formularios -->
+                <div class="input-group">
+                    {{ form.nombre }}
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Grilla de 3 elementos por fila -->
+        <div class="row g-4">
+            {% for emp in emprendimientos %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h4 class="card-title text-primary">{{ emp.nombre }}</h4>
+                        <p class="card-text mt-3">
+                            <span class="badge bg-success fs-6">
+                                Visitas: {{ emp.totalVistas }}
+                            </span>
+                        </p>
+                        <!-- Este es el botón nuevo. Fíjate en el href -->
+                        <a href="{% url 'registrar_visita' emp.idEmprendimiento %}"
+                            class="btn btn-outline-primary mt-auto">
+                            Ver Emprendimiento
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">Aún no hay emprendimientos. ¡Agrega el primero!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</body>
+
+</html>

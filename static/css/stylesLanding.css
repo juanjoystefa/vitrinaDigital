@@ -1,12 +1,13 @@
 :root{
-    --rojo:#C4122F;
-    --rojo-oscuro:#8C0E22;
-    --tinta:#1C1917;
-    --hueso:#FBF6F2;
-    --niebla:#F1E9E2;
-    --chispa:#E8A33D;
-    --texto-suave:#6b655d;
-    --borde:#e4d9cf;
+    /* Paleta según Manual de Identidad UAO (jul. 2026) */
+    --rojo:#FF051E;          /* Rojo Principal — Pantone 1788 C */
+    --rojo-oscuro:#AC0B32;   /* Subordinado — Pantone 7425 C */
+    --tinta:#8A1428;         /* Subordinado más oscuro, usado como "tinta"/texto — Pantone 194 C */
+    --hueso:#FBF5EC;         /* Crema — Pantone 9043 C */
+    --niebla:#F3E9DC;        /* Tinte de Crema para fondos alternos */
+    --chispa:#FE9800;        /* Acento — Pantone 1375 C */
+    --texto-suave:#7a6f67;
+    --borde:#EAD9C9;
     --radio:10px;
     --maxw:1180px;
   }
@@ -16,13 +17,15 @@
     margin:0;
     background:var(--hueso);
     color:var(--tinta);
-    font-family:'Inter',sans-serif;
+    font-family:'DM Sans',sans-serif;
+    font-weight:400;
     font-size:16px;
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3,h4{
-    font-family:'Space Grotesk',sans-serif;
+    font-family:'DM Sans',sans-serif;
+    font-weight:800;
     margin:0;
     letter-spacing:-0.01em;
   }
@@ -47,9 +50,10 @@
     max-width:var(--maxw);margin:0 auto;padding:16px 28px;
     display:flex;align-items:center;justify-content:space-between;
   }
-  .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;}
-  .brand svg{width:34px;height:34px;flex-shrink:0;}
-  .brand small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:11px;color:var(--texto-suave);letter-spacing:.03em;}
+  .brand{display:flex;align-items:center;gap:14px;font-family:'DM Sans',sans-serif;font-weight:800;font-size:20px;}
+  .brand .logo-img{width:70px;height:auto;flex-shrink:0;display:block;}
+  .brand .divisor{width:1px;align-self:stretch;background:var(--borde);}
+  .brand small{display:block;font-family:'DM Sans',sans-serif;font-weight:600;font-size:11px;color:var(--tinta);letter-spacing:.03em;}
   .nav-links{display:flex;align-items:center;gap:30px;}
   .nav-links a{font-size:15px;font-weight:500;color:var(--tinta);position:relative;padding:4px 0;}
   .nav-links a:hover{color:var(--rojo);}
@@ -76,11 +80,11 @@
   }
   .btn:hover{transform:translateY(-1px);}
   .btn-primary{background:var(--tinta);color:#fff;}
-  .btn-primary:hover{background:#000;}
+  .btn-primary:hover{background:#5f0f1c;}
   .btn-outline{border-color:var(--tinta);color:var(--tinta);}
   .btn-outline:hover{background:var(--tinta);color:#fff;}
   .hero-stats{display:flex;gap:34px;margin-top:44px;}
-  .hero-stats div b{display:block;font-family:'Space Grotesk';font-size:26px;color:var(--rojo);}
+  .hero-stats div b{display:block;font-family:'DM Sans';font-weight:800;font-size:26px;color:var(--rojo);}
   .hero-stats div span{font-size:13px;color:var(--texto-suave);}
 
   .hero-art{position:relative;aspect-ratio:1/1;}
@@ -171,7 +175,7 @@
   }
   .emp-cover{
     height:110px;display:flex;align-items:center;justify-content:center;
-    font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#fff;
+    font-family:'DM Sans';font-weight:800;font-size:26px;color:#fff;
   }
   .emp-body{padding:20px;flex:1;display:flex;flex-direction:column;}
   .emp-cat{font-size:12px;color:var(--rojo);font-weight:600;margin-bottom:6px;}
@@ -250,8 +254,8 @@
   }
   .contacto-card h3{font-size:24px;margin-bottom:10px;}
   .contacto-card p{color:#cfc9c2;font-size:15px;margin-bottom:26px;}
-  .contacto-card .btn-primary{background:var(--chispa);color:#1C1917;}
-  .contacto-card .btn-primary:hover{background:#f0b25c;}
+  .contacto-card .btn-primary{background:var(--chispa);color:var(--tinta);}
+  .contacto-card .btn-primary:hover{background:#e08600;}
   .info-list{display:flex;flex-direction:column;gap:22px;}
   .info-item{display:flex;gap:14px;}
   .info-item .nodo{margin-top:6px;}
@@ -274,9 +278,11 @@
   .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px;}
   .footer-grid h5{font-size:14px;color:#fff;margin-bottom:16px;}
   .footer-grid a,.footer-grid p{font-size:13.5px;color:#b8b2ab;line-height:1.8;}
-  .footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-  .footer-brand svg{width:28px;height:28px;}
-  .footer-brand b{font-family:'Space Grotesk';color:#fff;font-size:18px;}
+  .footer-brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .footer-brand .logo-img{width:52px;height:auto;display:block;}
+  .footer-brand .footer-logo{filter:brightness(0) invert(1);} /* logo es rojo; se invierte a claro para el fondo oscuro del footer */
+  .footer-brand .divisor{width:1px;height:26px;background:#4a413c;}
+  .footer-brand b{font-family:'DM Sans';font-weight:700;color:#fff;font-size:15px;}
   .fine{
     border-top:1px solid #33302c;margin-top:48px;padding-top:24px;
     font-size:12px;color:#8a847c;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;

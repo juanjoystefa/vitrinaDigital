@@ -1,14 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vitrina Digital</title>
-    <!-- Importamos Bootstrap 5 -->
+
+    <!-- 1. Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- 2. Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 3. Variables de diseño globales -->
+    <link rel="stylesheet" href="{% static 'css/stylesLanding.css' %}">
+
+    <!-- 4. Estilos de la navbar (se cargan al final para que tengan prioridad sobre Bootstrap) -->
+    <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}">
 </head>
 
 <body class="bg-light">
+
+    {% include 'includes/navbar.html' %}
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Vitrina de Emprendimientos</h1>

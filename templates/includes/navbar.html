@@ -1,0 +1,25 @@
+{% load static %}
+<header class="main-header">
+  <nav class="nav-container">
+    <a href="/" class="brand">
+      <img class="logo-img" src="{% static 'img/uao-color.png' %}" alt="Logo UAO">
+      <span class="divisor"></span>
+      <div>SINAPSIS<small>Centro de Innovación &amp; Emprendimiento</small></div>
+    </a>
+    
+    <div class="nav-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#convocatorias">Convocatorias</a>
+      <a href="{% url 'emprendimientos' %}">Red de emprendimientos</a>
+      <a href="#contacto">Contacto</a>
+      <a class="nav-cta" href="#contacto">
+        <span>Escríbenos</span>
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+  </nav>
+</header>

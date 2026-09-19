@@ -1,0 +1,142 @@
+/* ==========================================
+   COMPONENTE: NAVBAR
+   ========================================== */
+
+/* Asegurar variables si se carga de forma independiente */
+:root {
+  --rojo: #FF051E;
+  --rojo-oscuro: #AC0B32;
+  --tinta: #8A1428;
+  --borde: #EAD9C9;
+  --maxw: 1180px;
+}
+
+/* Anular reseteo de enlaces de Bootstrap dentro del header */
+header.main-header a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+header.main-header .brand {
+  color: var(--tinta) !important;
+}
+
+header.main-header .brand:hover {
+  color: var(--tinta) !important;
+}
+
+
+header.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251, 245, 236, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--borde);
+  box-shadow: 0 2px 12px rgba(138, 20, 40, 0.04);
+}
+
+nav.nav-container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.brand .logo-img {
+  width: 65px;
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+}
+
+.brand .divisor {
+  width: 1px;
+  height: 28px;
+  background: var(--borde);
+}
+
+.brand small {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--tinta);
+  letter-spacing: .03em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.nav-links a:not(.nav-cta) {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--tinta);
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:not(.nav-cta):hover {
+  color: var(--rojo);
+}
+
+/* Botón Contacto / Escríbenos */
+.nav-cta {
+  background: var(--rojo);
+  color: #fff !important;
+  padding: 9px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(255, 5, 30, 0.22);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.nav-cta svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-cta:hover {
+  background: var(--rojo-oscuro);
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(172, 11, 50, 0.32);
+}
+
+.nav-cta:hover svg {
+  transform: translateX(3px);
+}
+
+.nav-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(172, 11, 50, 0.25);
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--tinta);
+}

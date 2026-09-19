@@ -15,7 +15,7 @@ def inicio(request):
     # EL signo menos antes del totalVisitas significa orden descendete (mayor a menor)
     emprendimientos = Emprendimiento.objects.all().order_by("-totalVistas")
 
-    return render(request, "emprendimientos.html", {
+    return render(request, "emprendimientos/emprendimientos.html", {
         "emprendimientos": emprendimientos,
         "form": form,
     })

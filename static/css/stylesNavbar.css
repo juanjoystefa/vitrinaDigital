@@ -83,6 +83,7 @@ nav.nav-container {
   display: flex;
   align-items: center;
   gap: 26px;
+  white-space: nowrap;
 }
 
 .nav-links a:not(.nav-cta) {

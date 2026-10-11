@@ -1,0 +1,62 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block contenido_admin %}
+<section id="usuarios" class="admin-section">
+    <div class="section-header">
+        <h2>Usuarios Registrados</h2>
+        <!-- 1. Buscador funcional -->
+        <div class="search-bar">
+            <form method="GET" action="">
+                <!-- El name="q" es lo que recibe request.GET.get('q') en tu vista -->
+                <!-- El value="{{ query }}" mantiene lo que el admin escribió después de buscar -->
+                <input type="text" name="q" value="{{ query }}" placeholder="Buscar por nombre o correo...">
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Tabla dinámica de usuarios -->
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Correo Electrónico</th>
+                    <th>Rol</th>
+                    <th>Fecha de Registro</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Recorremos los perfiles que nos envió la vista -->
+                {% for perfil in usuarios %}
+                <tr>
+                    <!-- Accedemos a los datos del User nativo de Django a través del perfil -->
+                    <td><b>{{ perfil.usuario.username }}</b></td>
+                    <td>{{ perfil.usuario.email|default:"Sin correo" }}</td>
+                    
+                    <!-- Lógica para los colores de las etiquetas de los roles -->
+                    <td>
+                        {% if perfil.rol == 'admin' %}
+                            <span class="pill" style="background:var(--tinta); color:#fff;">Administrador</span>
+                        {% elif perfil.rol == 'emprendedor' %}
+                            <span class="pill pill-open">Emprendedor</span>
+                        {% else %}
+                            <span class="pill pill-closed">Visitante</span>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- Damos formato a la fecha de registro -->
+                    <td>{{ perfil.usuario.date_joined|date:"d/m/Y" }}</td>
+                </tr>
+                {% empty %}
+                <!-- Si la búsqueda no arroja resultados o no hay usuarios -->
+                <tr>
+                    <td colspan="4" class="text-center py-5 text-muted">
+                        No se encontraron usuarios.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

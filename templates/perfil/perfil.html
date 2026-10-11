@@ -1,20 +1,23 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Mi Perfil - Sinapsis</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/stylesLanding.css' %}">
     <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}">
 </head>
+
 <body class="bg-light">
 
     {% include 'includes/navbar.html' %}
 
     <div class="container mt-5 mb-5">
-        
+
         <!-- Tarjeta de Información del Usuario -->
         <div class="card shadow-sm p-4 mb-5" style="border-radius: 15px; border: 1px solid var(--borde);">
             <div class="d-flex justify-content-between align-items-center">
@@ -24,7 +27,8 @@
                 </div>
                 <div class="text-end">
                     <p class="mb-1 text-muted small">Tu Rol en Sinapsis</p>
-                    <span class="badge" style="background-color: var(--rojo); font-size: 14px; padding: 8px 15px; border-radius: 999px;">
+                    <span class="badge"
+                        style="background-color: var(--rojo); font-size: 14px; padding: 8px 15px; border-radius: 999px;">
                         {{ request.user.perfil.rol|title }}
                     </span>
                 </div>
@@ -38,37 +42,60 @@
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm" style="border-radius: 12px; border: 1px solid var(--borde);">
                     <div class="card-body d-flex flex-column">
-                        
+
                         <!-- Estado del emprendimiento -->
                         <div class="mb-3">
                             {% if emp.estado == 'activo' %}
-                                <span class="badge bg-success">Activo y Público</span>
+                            <span class="badge bg-success">Activo y Público</span>
                             {% elif emp.estado == 'pendiente' %}
-                                <span class="badge bg-warning text-dark">En Revisión</span>
+                            <span class="badge bg-warning text-dark">En Revisión</span>
                             {% elif emp.estado == 'rechazado' %}
-                                <span class="badge bg-danger">Requiere Ajustes</span>
+                            <span class="badge bg-danger">Requiere Ajustes</span>
                             {% endif %}
                         </div>
 
                         <h4 class="card-title" style="color: var(--tinta);">{{ emp.nombre }}</h4>
                         {% if emp.descripcion %}
-                            <p class="card-text text-muted small">{{ emp.descripcion|truncatechars:80 }}</p>
+                        <p class="card-text text-muted small">{{ emp.descripcion|truncatechars:80 }}</p>
                         {% endif %}
-                        
+
                         <div class="mt-auto pt-3 border-top">
                             <p class="mb-0 small"><strong>Visitas Totales:</strong> {{ emp.totalVistas }}</p>
                             <p class="mb-0 small text-muted">WhatsApp: {{ emp.vistas_wa }} | Instagram: {{ emp.vistas_ig }}</p>
+                        </div>
+                        <div class="d-flex gap-2 mt-3 pt-3 border-top">
+                            <!-- Botón Editar -->
+                            <a href="{% url 'editar_emprendimiento' emp.idEmprendimiento %}?next={{ request.path }}" 
+                            class="btn btn-outline flex-grow-1 justify-content-center"
+                            style="background-color: var(--borde); color: var(--tinta); font-weight: 600; border-radius: 999px;">
+                                Editar
+                            </a>
+
+                            <!-- Botón Eliminar (La etiqueta form ahora es flex-grow-1 y d-flex) -->
+                            <form action="{% url 'eliminar_emprendimiento' emp.idEmprendimiento %}?next={{ request.path }}" 
+                                method="POST" 
+                                class="flex-grow-1 m-0 d-flex"
+                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este emprendimiento? Esta acción no se puede deshacer.');">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        class="btn flex-grow-1 justify-content-center"
+                                        style="background-color: var(--rojo); color: white; font-weight: 600; border-radius: 999px;">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--texto-suave); margin-bottom: 15px;">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="color: var(--texto-suave); margin-bottom: 15px;">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
                 <h5 class="text-muted">Aún no has postulado ningún emprendimiento.</h5>
-                <a href="{% url 'emprendimientos' %}" class="btn mt-3" style="background-color: var(--tinta); color: white; border-radius: 999px;">Postular mi idea</a>
+                <a href="{% url 'emprendimientos' %}" class="btn mt-3"
+                    style="background-color: var(--tinta); color: white; border-radius: 999px;">Postular mi idea</a>
             </div>
             {% endfor %}
         </div>
@@ -76,4 +103,5 @@
     </div>
 
 </body>
+
 </html>

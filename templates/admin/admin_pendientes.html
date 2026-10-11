@@ -1,0 +1,44 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block contenido_admin %}
+<section id="pendientes" class="admin-section">
+    <div class="section-header">
+        <h2>Aprobar Emprendimientos</h2>
+        <!-- Buscador -->
+        <div class="search-bar">
+            <form method="GET" action="">
+                <input type="text" name="q" value="{{ query }}" placeholder="Buscar solicitud...">
+            </form>
+        </div>
+    </div>
+
+    <div class="approval-grid">
+        {% for emp in pendientes %}
+        <!-- Tarjeta de Solicitud -->
+        <div class="admin-card">
+            <div class="card-head">
+                <span class="pill pill-soon">Pendiente</span>
+                <small>{{ emp.fecha_creacion|timesince }}</small>
+            </div>
+            <h3>{{ emp.nombre }}</h3>
+            <p>Usuario: <b>{{ emp.creador.username|default:"Desconocido" }}</b></p>
+            {% if emp.descripcion %}
+                <p class="desc">{{ emp.descripcion }}</p>
+            {% else %}
+                <p class="desc text-muted">Sin descripción proporcionada.</p>
+            {% endif %}
+            <div class="card-actions">
+                <!-- Botón Rechazar -->
+                <a href="{% url 'cambiar_estado_emprendimiento' emp.idEmprendimiento 'rechazado' %}" class="btn btn-outline" style="color: #d32f2f; border-color: #d32f2f;">Rechazar</a>
+                <!-- Botón Aceptar -->
+                <a href="{% url 'cambiar_estado_emprendimiento' emp.idEmprendimiento 'activo' %}" class="btn btn-primary">Aceptar y Publicar</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5 text-muted" style="width: 100%;">
+            No hay solicitudes pendientes en este momento.
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

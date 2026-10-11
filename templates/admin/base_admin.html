@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Sinapsis UAO</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stylesLanding.css' %}">
+    <link rel="stylesheet" href="{% static 'css/adminStyles.css' %}">
+</head>
+
+<body class="admin-body">
+
+    <!-- BARRA LATERAL -->
+    <aside class="admin-sidebar">
+        <a href="{% url 'inicio' %}">
+            <div class="brand">
+                <img class="logo-img" src="{% static 'img/uao-color.png' %}" alt="Logo UAO">
+                <span class="divisor"></span>
+                <div>SINAPSIS<small>Panel Administrativo</small></div>
+            </div>
+        </a>
+        <nav class="sidebar-nav">
+            <!-- La lógica del IF verifica en qué URL estás para poner la clase 'active' -->
+            <a href="{% url 'admin_pendientes' %}"
+                class="{% if request.resolver_match.url_name == 'admin_pendientes' %}active{% endif %}">
+                Solicitudes Pendientes
+                <!-- Solo mostramos la burbuja si hay 1 o más pendientes -->
+                {% if cantidad_pendientes > 0 %}
+                    <span class="badge">{{ cantidad_pendientes }}</span>
+                {% endif %}
+            </a>
+
+            <a href="{% url 'admin_usuarios' %}"
+                class="{% if request.resolver_match.url_name == 'admin_usuarios' %}active{% endif %}">
+                Gestión de Usuarios
+            </a>
+
+            <a href="{% url 'admin_emprendimientos' %}"
+                class="{% if request.resolver_match.url_name == 'admin_emprendimientos' %}active{% endif %}">
+                Emprendimientos & Visitas
+            </a>
+
+            <!-- Cambia 'inicio' por el nombre real de la ruta de tu página principal si es distinto -->
+            <a href="{% url 'inicio' %}" class="back-link">← Volver al sitio web</a>
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL DINÁMICO -->
+    <main class="admin-main">
+        {% block contenido_admin %}
+        <!-- Aquí se inyectará el contenido de cada página hija -->
+        {% endblock %}
+    </main>
+
+</body>
+
+</html>

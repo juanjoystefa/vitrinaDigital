@@ -1,17 +1,17 @@
 {% load static %}
 <header class="main-header">
   <nav class="nav-container">
-    <a href="/" class="brand">
+    <a href="{% url 'inicio' %}" class="brand">
       <img class="logo-img" src="{% static 'img/uao-color.png' %}" alt="Logo UAO">
       <span class="divisor"></span>
       <div>SINAPSIS<small>Centro de Innovación &amp; Emprendimiento</small></div>
     </a>
 
     <div class="nav-links">
-      <a href="#servicios">Servicios</a>
-      <a href="#convocatorias">Convocatorias</a>
+      <a href="{% url 'inicio' %}#servicios">Servicios</a>
+      <a href="{% url 'inicio' %}#convocatorias">Convocatorias</a>
       <a href="{% url 'emprendimientos' %}">Red de emprendimientos</a>
-      <a href="#contacto">Contacto</a>
+      <a href="{% url 'inicio' %}#contacto">Contacto</a>
 
       <!-- Separador visual -->
       <span style="width: 1px; height: 20px; background-color: var(--borde); margin: 0 5px;"></span>
@@ -20,12 +20,20 @@
       {% if request.user.is_authenticated %}
 
       <!-- Si está logueado: Mostramos su nombre y la opción de salir -->
-      <span style="font-weight: 600; color: var(--tinta); font-size: 14.5px;">Hola, {{ request.user.username }}</span>
-      <a href="{% url 'logout' %}" style="color: var(--rojo); font-size: 13.5px; font-weight: 600;">Salir</a>
+      <a href="{% url 'perfil' %}"><span style="font-weight: 600; color: var(--tinta); font-size: 14.5px;">Hola, {{ request.user.username }}</span>
+        <!-- Formulario invisible para el Logout seguro de Django -->
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
+      </a>
+      {% csrf_token %}
+      <button type="submit"
+        style="background: none; border: none; color: var(--rojo); font-size: 13.5px; font-weight: 600; cursor: pointer; padding: 0;">
+        Salir
+      </button>
+      </form>
 
       <!-- Condición para verificar si es administrador -->
       {% if request.user.perfil.rol == 'admin' %}
-      <a class="nav-cta" href="{% url 'admin_dashboard' %}"
+      <a class="nav-cta" href="{% url 'admin_pendientes' %}"
         style="background-color: var(--tinta); box-shadow: none; white-space: nowrap;">
         <span>Panel Admin</span>
       </a>

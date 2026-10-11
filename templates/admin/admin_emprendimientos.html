@@ -1,0 +1,92 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block contenido_admin %}
+<section id="emprendimientos" class="admin-section">
+    <div class="section-header">
+        <h2>Emprendimientos y Estadísticas</h2>
+        
+        <!-- 1. Buscador funcional -->
+        <div class="search-bar">
+            <form method="GET" action="">
+                <input type="text" name="q" value="{{ query }}" placeholder="Buscar emprendimiento...">
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table table-hover">
+            <thead>
+                <tr>
+                    <th>Emprendimiento</th>
+                    <th>Estado</th>
+                    <th>Visitas Totales</th>
+                    <th>Detalle de Clics</th>
+                    <th>Acciones</th> <!-- NUEVA COLUMNA -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 2. Ciclo para dibujar cada emprendimiento de la base de datos -->
+                {% for emp in emprendimientos %}
+                <tr>
+                    <td>
+                        <b>{{ emp.nombre }}</b><br>
+                        <small class="text-muted">Creado por: {{ emp.creador.username|default:"Desconocido" }}</small>
+                    </td>
+                    
+                    <!-- Estado con colores dinámicos -->
+                    <td>
+                        {% if emp.estado == 'activo' %}
+                            <span class="pill pill-open">Activo</span>
+                        {% elif emp.estado == 'pendiente' %}
+                            <span class="pill pill-soon">Pendiente</span>
+                        {% else %}
+                            <span class="pill pill-closed">Rechazado</span>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- Estadísticas conectadas a la base de datos -->
+                    <td class="stat-total">{{ emp.totalVistas }}</td>
+                    <td>
+                        <div class="stats-breakdown">
+                            <div class="stat-item wa">
+                                <small>WhatsApp</small>
+                                <b>{{ emp.vistas_wa }}</b>
+                            </div>
+                            <div class="stat-item ig">
+                                <small>Instagram</small>
+                                <b>{{ emp.vistas_ig }}</b>
+                            </div>
+                            <div class="stat-item web">
+                                <small>Web</small>
+                                <b>{{ emp.vistas_web }}</b>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <!-- 3. Botones CRUD -->
+                    <td>
+                        <div class="d-flex gap-2">
+                            <!-- Botón Editar -->
+                            <a href="{% url 'editar_emprendimiento' emp.idEmprendimiento %}?next={{ request.path }}" class="btn btn-sm" style="border: 1px solid var(--borde); color: var(--tinta); font-weight: 600; padding: 6px 12px; border-radius: 8px;">Editar</a>
+                            
+                            <!-- Botón Eliminar -->
+                            <form action="{% url 'eliminar_emprendimiento' emp.idEmprendimiento %}?next={{ request.path }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este emprendimiento?');" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm" style="background-color: var(--rojo); color: white; font-weight: 600; padding: 6px 12px; border-radius: 8px;">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <!-- Mensaje si no hay registros -->
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        No se encontraron emprendimientos.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

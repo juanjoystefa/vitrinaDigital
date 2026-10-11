@@ -5,102 +5,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Emprendimiento, Vistas, Perfil
 from .forms import EmprendimientoForm, RegistroForm
 
-# ==========================================
-# 1. VISTAS PÚBLICAS
-# ==========================================
-
-def inicio(request):
-    if request.method == "POST":
-        form = EmprendimientoForm(request.POST)
-        if form.is_valid():
-            # Por defecto, el modelo guardará el estado como 'pendiente'
-            form.save()
-            return redirect("emprendimientos") 
-    else:
-        form = EmprendimientoForm()
-        
-    # Solo mostramos los emprendimientos que ya fueron aceptados ('activo')
-    emprendimientos = Emprendimiento.objects.filter(estado='activo').order_by("-totalVistas")
-
-    return render(request, "emprendimientos/emprendimientos.html", {
-        "emprendimientos": emprendimientos,
-        "form": form,
-    })
-
-def registrar_visita(request, id, origen='general'):
-    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
-    
-    # Creamos la visita pasándole el origen (wa, ig, web o general)
-    Vistas.objects.create(idEmprendimiento=emprendimiento, origen=origen)
-    
-    # Redirección inteligente: si hizo clic en WhatsApp, lo llevamos a WhatsApp
-    if origen == 'wa' and emprendimiento.link_whatsapp:
-        return redirect(f"https://wa.me/{emprendimiento.link_whatsapp}")
-    elif origen == 'ig' and emprendimiento.link_instagram:
-        return redirect(emprendimiento.link_instagram)
-    elif origen == 'web' and emprendimiento.link_web:
-        return redirect(emprendimiento.link_web)
-        
-    # Si es 'general', recarga la página principal
-    return redirect('inicio')
-
-
-# ==========================================
-# 2. VISTAS DEL PANEL DE ADMINISTRACIÓN
-# ==========================================
-
-def admin_dashboard(request):
-    # Nota: Aquí deberías validar si el usuario logueado tiene el rol 'admin'
-    
-    # Capturamos lo que el admin escriba en los buscadores
-    query = request.GET.get('q', '')
-
-    # Consultamos las 3 tablas
-    pendientes = Emprendimiento.objects.filter(estado='pendiente')
-    usuarios = Perfil.objects.all()
-    todos_emprendimientos = Emprendimiento.objects.all().order_by("-totalVistas")
-
-    # Si hay una búsqueda, filtramos los resultados
-    if query:
-        pendientes = pendientes.filter(nombre__icontains=query)
-        usuarios = usuarios.filter(Q(usuario__username__icontains=query) | Q(usuario__email__icontains=query))
-        todos_emprendimientos = todos_emprendimientos.filter(nombre__icontains=query)
-
-    return render(request, "admin/admin_dashboard.html", {
-        "pendientes": pendientes,
-        "usuarios": usuarios,
-        "emprendimientos": todos_emprendimientos,
-        "query": query
-    })
-
-def cambiar_estado_emprendimiento(request, id, nuevo_estado):
-    # Esta vista se ejecuta cuando el admin da clic en "Aceptar" o "Rechazar"
-    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
-    
-    # Validamos que el estado exista y lo actualizamos
-    if nuevo_estado in dict(Emprendimiento.ESTADOS).keys():
-        emprendimiento.estado = nuevo_estado
-        emprendimiento.save()
-        
-    return redirect('admin_dashboard')
-
 # ================================
-# VISTA DE REGISTRO
-# ================================
-def registro(request):
-    if request.method == 'POST':
-        form = RegistroForm(request.POST)
-        if form.is_valid():
-            usuario = form.save() # Esto dispara la señal de models.py y crea el perfil "visitante"
-            login(request, usuario) # Inicia sesión automáticamente
-            return redirect('emprendimientos')
-    else:
-        form = RegistroForm()
-    return render(request, 'login/registro.html', {'form': form})
-
-
-# ================================
-# VISTA DE INICIO (Actualizada)
+# VISTA DE INICIO
 # ================================
 def inicio(request):
     if request.method == "POST":
@@ -138,3 +44,161 @@ def perfil_usuario(request):
     return render(request, 'perfil/perfil.html', {
         'mis_emprendimientos': mis_emprendimientos
     })
+
+# ==========================================
+# VISTAS PÚBLICAS
+# ==========================================
+
+def registrar_visita(request, id, origen='general'):
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
+    
+    # Creamos la visita pasándole el origen (wa, ig, web o general)
+    Vistas.objects.create(idEmprendimiento=emprendimiento, origen=origen)
+    
+    # Redirección inteligente: si hizo clic en WhatsApp, lo llevamos a WhatsApp
+    if origen == 'wa' and emprendimiento.link_whatsapp:
+        return redirect(f"https://wa.me/{emprendimiento.link_whatsapp}")
+    elif origen == 'ig' and emprendimiento.link_instagram:
+        return redirect(emprendimiento.link_instagram)
+    elif origen == 'web' and emprendimiento.link_web:
+        return redirect(emprendimiento.link_web)
+        
+    # Si es 'general', recarga la página principal
+    return redirect('inicio')
+
+# ==========================================
+# CRUD: EDITAR Y ELIMINAR EMPRENDIMIENTOS
+# ==========================================
+
+@login_required
+def editar_emprendimiento(request, id):
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
+    
+    # Seguridad: Verificamos que quien intenta editar sea el creador o un admin
+    if request.user != emprendimiento.creador and request.user.perfil.rol != 'admin':
+        return redirect('perfil')
+
+    # Capturamos a dónde debemos volver (por defecto, al perfil)
+    url_retorno = request.GET.get('next', 'perfil')
+
+    if request.method == "POST":
+        form = EmprendimientoForm(request.POST, instance=emprendimiento)
+        if form.is_valid():
+            form.save()
+            # Redirigimos a la url capturada.
+            # Si 'url_retorno' empieza con '/', es una ruta (ej. /panel/emprendimientos/).
+            # Si no, asumimos que es el nombre de una vista de Django (ej. 'perfil').
+            if url_retorno.startswith('/'):
+                return redirect(url_retorno)
+            return redirect(url_retorno)
+    else:
+        form = EmprendimientoForm(instance=emprendimiento)
+
+    return render(request, "perfil/editar_emprendimiento.html", {
+        "form": form,
+        "emprendimiento": emprendimiento,
+        "url_retorno": url_retorno # Se lo pasamos a la plantilla para no perderlo
+    })
+
+@login_required
+def eliminar_emprendimiento(request, id):
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
+    
+    # Capturamos a dónde debemos volver
+    url_retorno = request.GET.get('next', 'perfil')
+
+    # Seguridad: Solo el creador o un admin pueden borrarlo
+    if request.user == emprendimiento.creador or request.user.perfil.rol == 'admin':
+        emprendimiento.delete()
+        
+    if url_retorno.startswith('/'):
+        return redirect(url_retorno)
+    return redirect(url_retorno)
+
+
+# ==========================================
+# VISTAS DEL PANEL DE ADMINISTRACIÓN SEPARADAS
+# ==========================================
+
+@login_required
+def admin_pendientes(request):
+    if request.user.perfil.rol != 'admin':
+        return redirect('inicio')
+
+    query = request.GET.get('q', '')
+    pendientes = Emprendimiento.objects.filter(estado='pendiente')
+    if query:
+        pendientes = pendientes.filter(nombre__icontains=query)
+
+    # 1. Contamos el total real de pendientes
+    cantidad_pendientes = Emprendimiento.objects.filter(estado='pendiente').count()
+
+    return render(request, "admin/admin_pendientes.html", {
+        "pendientes": pendientes,
+        "query": query,
+        "cantidad_pendientes": cantidad_pendientes # 2. Lo enviamos a la plantilla
+    })
+
+@login_required
+def admin_usuarios(request):
+    if request.user.perfil.rol != 'admin':
+        return redirect('inicio')
+
+    query = request.GET.get('q', '')
+    usuarios = Perfil.objects.all()
+    if query:
+        usuarios = usuarios.filter(Q(usuario__username__icontains=query) | Q(usuario__email__icontains=query))
+
+    cantidad_pendientes = Emprendimiento.objects.filter(estado='pendiente').count()
+
+    return render(request, "admin/admin_usuarios.html", {
+        "usuarios": usuarios,
+        "query": query,
+        "cantidad_pendientes": cantidad_pendientes
+    })
+
+@login_required
+def admin_emprendimientos(request):
+    if request.user.perfil.rol != 'admin':
+        return redirect('inicio')
+
+    query = request.GET.get('q', '')
+    todos_emprendimientos = Emprendimiento.objects.all().order_by("-totalVistas")
+    if query:
+        todos_emprendimientos = todos_emprendimientos.filter(nombre__icontains=query)
+
+    cantidad_pendientes = Emprendimiento.objects.filter(estado='pendiente').count()
+
+    return render(request, "admin/admin_emprendimientos.html", {
+        "emprendimientos": todos_emprendimientos,
+        "query": query,
+        "cantidad_pendientes": cantidad_pendientes
+    })
+
+@login_required
+def cambiar_estado_emprendimiento(request, id, nuevo_estado):
+    if request.user.perfil.rol != 'admin':
+        return redirect('inicio')
+
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
+    
+    if nuevo_estado in dict(Emprendimiento.ESTADOS).keys():
+        emprendimiento.estado = nuevo_estado
+        emprendimiento.save()
+        
+    # Cambio clave: ahora redirige específicamente a la vista de pendientes
+    return redirect('admin_pendientes')
+
+# ================================
+# VISTA DE REGISTRO
+# ================================
+def registro(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            usuario = form.save() # Esto dispara la señal de models.py y crea el perfil "visitante"
+            login(request, usuario) # Inicia sesión automáticamente
+            return redirect('emprendimientos')
+    else:
+        form = RegistroForm()
+    return render(request, 'login/registro.html', {'form': form})

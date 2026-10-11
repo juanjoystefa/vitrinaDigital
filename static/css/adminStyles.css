@@ -1,0 +1,250 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS PARA EL PANEL ADMIN
+   ========================================== */
+
+.admin-body {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--niebla);
+    /* Fondo un poco más oscuro que el hueso para contraste */
+}
+
+/* --- Barra Lateral --- */
+.admin-sidebar {
+    width: 280px;
+    background-color: #fff;
+    border-right: 1px solid var(--borde);
+    position: fixed;
+    height: 100vh;
+    padding: 28px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar .brand {
+    padding: 0 28px;
+    margin-bottom: 40px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px;
+}
+
+.sidebar-nav a {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--texto-suave);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-nav a:hover {
+    background-color: var(--hueso);
+    color: var(--tinta);
+}
+
+.sidebar-nav a.active {
+    background-color: var(--rojo);
+    color: #fff;
+}
+
+.sidebar-nav a .badge {
+    background: #fff;
+    color: var(--rojo);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.sidebar-nav a.back-link {
+    margin-top: auto;
+    color: var(--rojo);
+}
+
+/* --- Contenido Principal --- */
+.admin-main {
+    flex: 1;
+    margin-left: 280px;
+    /* Compensa el ancho del sidebar */
+    padding: 40px 60px;
+}
+
+.admin-section {
+    background: #fff;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-header h2 {
+    font-size: 24px;
+    color: var(--tinta);
+}
+
+.mt-5 {
+    margin-top: 40px;
+}
+
+/* --- Buscadores --- */
+.search-bar input {
+    padding: 10px 18px;
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+    width: 300px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-bar input:focus {
+    border-color: var(--rojo);
+}
+
+/* --- Tarjetas de Aprobación --- */
+.approval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.admin-card {
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.admin-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.admin-card p {
+    font-size: 14px;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+}
+
+.admin-card p.desc {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--borde);
+    flex-grow: 1;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.card-actions .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    flex: 1;
+    justify-content: center;
+}
+
+/* --- Tablas de Datos --- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 14px 16px;
+    background-color: var(--hueso);
+    color: var(--tinta);
+    font-weight: 700;
+    font-size: 14px;
+    border-bottom: 2px solid var(--borde);
+}
+
+.admin-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--borde);
+    font-size: 14.5px;
+    vertical-align: middle;
+}
+
+.admin-table.table-hover tbody tr:hover {
+    background-color: var(--niebla);
+}
+
+.action-link {
+    color: var(--rojo);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* --- Desglose de Estadísticas --- */
+.stat-total {
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--tinta);
+}
+
+.stats-breakdown {
+    display: flex;
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--hueso);
+    border: 1px solid var(--borde);
+}
+
+.stat-item small {
+    font-size: 11px;
+    color: var(--texto-suave);
+    font-weight: 600;
+}
+
+.stat-item b {
+    font-size: 15px;
+    color: var(--tinta);
+}
+
+/* Colores específicos para los canales */
+.stat-item.wa {
+    border-left: 3px solid #25D366;
+}
+
+.stat-item.ig {
+    border-left: 3px solid #E1306C;
+}
+
+.stat-item.web {
+    border-left: 3px solid var(--chispa);
+}

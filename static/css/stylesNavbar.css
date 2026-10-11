@@ -11,6 +11,8 @@
   --maxw: 1180px;
 }
 
+
+
 /* Anular reseteo de enlaces de Bootstrap dentro del header */
 header.main-header a {
   text-decoration: none !important;
@@ -139,4 +141,22 @@ nav.nav-container {
   font-size: 24px;
   cursor: pointer;
   color: var(--tinta);
+}
+
+/* Asegura que el contenedor alinee todos sus elementos (logo, divisor, texto) al mismo nivel */
+.main-header .brand {
+  display: flex !important;
+  align-items: center !important;
+  /* Centra verticalmente todo el contenido */
+  gap: 15px !important;
+  /* Controla el espacio exacto entre logo, divisor y texto. Ajusta los píxeles a tu gusto */
+  text-decoration: none !important;
+}
+
+/* Protege la imagen de los estilos globales de Bootstrap */
+.main-header .brand .logo-img {
+  margin: 0 !important;
+  padding: 0 !important;
+  vertical-align: middle !important;
+  box-sizing: content-box !important;
 }

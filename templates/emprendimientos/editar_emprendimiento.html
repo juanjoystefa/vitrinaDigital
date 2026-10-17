@@ -20,7 +20,7 @@
                     </div>
 
                     <!-- Agregamos la ruta completa a la que debe enviar los datos, incluyendo el parámetro 'next' -->
-                    <form method="POST" action="{% url 'editar_emprendimiento' emprendimiento.idEmprendimiento %}?next={{ url_retorno }}">
+                    <form method="POST" action="{% url 'editar_emprendimiento' emprendimiento.idEmprendimiento %}?next={{ url_retorno }}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <!-- Renderizamos el formulario -->
                         {{ form.as_p }}

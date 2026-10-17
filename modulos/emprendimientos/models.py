@@ -37,7 +37,7 @@ class Emprendimiento(models.Model):
     
     idEmprendimiento = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True, null=True) # Para que el admin sepa de qué trata
+    descripcion = models.TextField(blank=True, null=True, max_length=1000) # Para que el admin sepa de qué trata
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="emprendimientos")
     
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
@@ -46,8 +46,7 @@ class Emprendimiento(models.Model):
     # Redes sociales / Enlaces de contacto
     link_whatsapp = models.CharField(max_length=20, blank=True, null=True, help_text="Solo números")
     link_instagram = models.URLField(blank=True, null=True)
-    link_web = models.URLField(blank=True, null=True)
-
+    logo = models.ImageField(upload_to='emprendimientos/logos/', null=True, blank=True)
     # Contadores de visitas (Para que el panel cargue súper rápido sin calcular todo el tiempo)
     totalVistas = models.IntegerField(default=0)
     vistas_wa = models.IntegerField(default=0)

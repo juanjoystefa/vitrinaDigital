@@ -6,9 +6,40 @@ from django.contrib.auth.forms import UserCreationForm
 class EmprendimientoForm(forms.ModelForm):
     class Meta:
         model = Emprendimiento
-        fields = ["nombre"]
+        # 1. Agregamos los nuevos campos a la lista
+        fields = ["nombre", "descripcion", "link_whatsapp", "link_instagram", "logo"]
+        
+        # 2. Personalizamos las etiquetas (Lo que lee el usuario)
+        labels = {
+            'nombre': 'Nombre del Emprendimiento',
+            'descripcion': 'Descripción del proyecto',
+            'link_whatsapp': 'Número de WhatsApp',
+            'link_instagram': 'Enlace de Instagram',
+            'logo': 'Logotipo o Imagen'
+        }
+        
+        # 3. Asignamos clases de Bootstrap y textos de ejemplo (placeholders)
         widgets = {
-            'nombre': forms.TextInput(attrs={"class": "form-control", "placeholder": "Nombre del emprendimiento"})
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej: EcoPlásticos UAO'
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'class': 'form-control', 
+                'rows': 4, 
+                'placeholder': 'Cuéntanos brevemente de qué trata tu emprendimiento...'
+            }),
+            'link_whatsapp': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej: 573001234567 (Código de país + número)'
+            }),
+            'link_instagram': forms.URLInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Ej: https://instagram.com/tu_cuenta'
+            }),
+            'logo': forms.ClearableFileInput(attrs={
+                'class': 'form-control'
+            })
         }
 
 class RegistroForm(UserCreationForm):

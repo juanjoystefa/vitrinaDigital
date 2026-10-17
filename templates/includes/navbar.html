@@ -33,7 +33,7 @@
       <!-- Condición para verificar si es administrador -->
       {% if request.user.perfil.rol == 'admin' %}
       <a class="nav-btn-user" href="{% url 'admin_pendientes' %}"
-        style="background-color: var(--tinta); box-shadow: none; white-space: nowrap;">
+        style="background-color: var(--tinta); box-shadow: none; white-space: nowrap; padding-left: 16px; padding-right: 16px;">
         <span>Panel Admin</span>
       </a>
       {% endif %}
@@ -42,7 +42,7 @@
 
       <!-- Si NO está logueado: Mostramos iniciar sesión y registrarse -->
       <a href="{% url 'login' %}">Iniciar sesión</a>
-      <a class="nav-btn-user" href="{% url 'registro' %}" style="background-color: var(--tinta); box-shadow: none;">
+      <a class="nav-btn-user" href="{% url 'registro' %}" style="background-color: var(--tinta); box-shadow: none; padding-left: 16px; padding-right: 16px;">
         <span>Registrarse</span>
       </a>
 

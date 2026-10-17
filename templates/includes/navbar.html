@@ -8,10 +8,8 @@
     </a>
 
     <div class="nav-links">
-      <a href="{% url 'inicio' %}#servicios">Servicios</a>
-      <a href="{% url 'inicio' %}#convocatorias">Convocatorias</a>
-      <a href="{% url 'emprendimientos' %}">Red de emprendimientos</a>
-      <a href="{% url 'inicio' %}#contacto">Contacto</a>
+      <!-- Dejamos únicamente la Red de emprendimientos -->
+      <a href="{% url 'emprendimientos' %}">Red de emprendimientos asociados</a>
 
       <!-- Separador visual -->
       <span style="width: 1px; height: 20px; background-color: var(--borde); margin: 0 5px;"></span>
@@ -19,21 +17,22 @@
       <!-- LÓGICA DE USUARIOS Y AUTENTICACIÓN -->
       {% if request.user.is_authenticated %}
 
-      <!-- Si está logueado: Mostramos su nombre y la opción de salir -->
-      <a href="{% url 'perfil' %}"><span style="font-weight: 600; color: var(--tinta); font-size: 14.5px;">Hola, {{ request.user.username }}</span>
-        <!-- Formulario invisible para el Logout seguro de Django -->
-        <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
+      <!-- Si está logueado: Mostramos su nombre apuntando a su perfil -->
+      <a href="{% url 'perfil' %}">
+        <span style="font-weight: 600; color: var(--tinta); font-size: 14.5px;">Hola, {{ request.user.username }}</span>
       </a>
-      {% csrf_token %}
-      <button type="submit"
-        style="background: none; border: none; color: var(--rojo); font-size: 13.5px; font-weight: 600; cursor: pointer; padding: 0;">
-        Salir
-      </button>
+        
+      <!-- Formulario invisible para el Logout seguro de Django -->
+      <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
+        {% csrf_token %}
+        <button type="submit" style="background: none; border: none; color: var(--rojo); font-size: 13.5px; font-weight: 600; cursor: pointer; padding: 0;">
+          Salir
+        </button>
       </form>
 
       <!-- Condición para verificar si es administrador -->
       {% if request.user.perfil.rol == 'admin' %}
-      <a class="nav-cta" href="{% url 'admin_pendientes' %}"
+      <a class="nav-btn-user" href="{% url 'admin_pendientes' %}"
         style="background-color: var(--tinta); box-shadow: none; white-space: nowrap;">
         <span>Panel Admin</span>
       </a>
@@ -43,7 +42,7 @@
 
       <!-- Si NO está logueado: Mostramos iniciar sesión y registrarse -->
       <a href="{% url 'login' %}">Iniciar sesión</a>
-      <a class="nav-cta" href="{% url 'registro' %}" style="background-color: var(--tinta); box-shadow: none;">
+      <a class="nav-btn-user" href="{% url 'registro' %}" style="background-color: var(--tinta); box-shadow: none;">
         <span>Registrarse</span>
       </a>
 

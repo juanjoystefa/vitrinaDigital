@@ -42,7 +42,6 @@
         <line x1="190" y1="190" x2="310" y2="80" stroke="var(--borde)" stroke-width="1.5" />
         <line x1="190" y1="190" x2="60" y2="280" stroke="var(--borde)" stroke-width="1.5" />
         <line x1="190" y1="190" x2="300" y2="300" stroke="var(--borde)" stroke-width="1.5" />
-        <line x1="190" y1="190" x2="190" y2="40" stroke="var(--borde)" stroke-width="1.5" />
 
         <!-- Centro interactivo -->
         <circle class="pulse" cx="190" cy="190" r="7" fill="var(--rojo)" />
@@ -59,9 +58,9 @@
         <a href="#convocatorias">
           <g class="node-group" style="transform-origin: 310px 80px;">
             <circle cx="310" cy="80" r="34" fill="var(--chispa)" />
-            <text x="310" y="84" text-anchor="middle" fill="var(--tinta)" font-family="DM Sans" font-size="11"
+            <text x="310" y="78" text-anchor="middle" fill="var(--tinta)" font-family="DM Sans" font-size="11"
               font-weight="700">Convoca-</text>
-            <text x="310" y="96" text-anchor="middle" fill="var(--tinta)" font-family="DM Sans" font-size="11"
+            <text x="310" y="90" text-anchor="middle" fill="var(--tinta)" font-family="DM Sans" font-size="11"
               font-weight="700">torias</text>
           </g>
         </a>
@@ -81,14 +80,6 @@
               font-weight="700">Empren-</text>
             <text x="300" y="310" text-anchor="middle" fill="#fff" font-family="DM Sans" font-size="10.5"
               font-weight="700">dedores</text>
-          </g>
-        </a>
-
-        <a href="#contacto">
-          <g class="node-group" style="transform-origin: 190px 40px;">
-            <circle cx="190" cy="40" r="28" fill="#fff" stroke="var(--rojo)" stroke-width="2" />
-            <text x="190" y="44" text-anchor="middle" fill="var(--rojo)" font-family="DM Sans" font-size="10.5"
-              font-weight="700">WhatsApp</text>
           </g>
         </a>
       </svg>
@@ -112,8 +103,8 @@
           </svg>
           <h3>Mentoría y acompañamiento</h3>
           <p>Sesiones uno a uno con mentores de la red para validar, ajustar y hacer crecer tu proyecto.</p>
-          <a class="link" href="#">Agendar mentoría →</a>
         </div>
+
         <div class="servicio">
           <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <rect x="3" y="3" width="7" height="7" />
@@ -123,8 +114,8 @@
           </svg>
           <h3>Plataforma de experimentación e innovación</h3>
           <p>Laboratorios y espacios físicos para prototipar, fabricar y probar antes de salir al mercado.</p>
-          <a class="link" href="#">Conocer la plataforma →</a>
         </div>
+
         <div class="servicio">
           <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path
@@ -132,16 +123,8 @@
           </svg>
           <h3>Convocatorias y oportunidades</h3>
           <p>Becas, bootcamps y capital semilla de la UAO y de aliados externos, filtradas y al día.</p>
-          <a class="link" href="#convocatorias">Ver todas →</a>
         </div>
-        <div class="servicio">
-          <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M8 12h8M8 16h5M4 4h16v14H8l-4 4V4z" />
-          </svg>
-          <h3>Chat directo por WhatsApp</h3>
-          <p>Un asesor te responde sin formularios ni correos: preguntas y avanzas en la misma conversación.</p>
-          <a class="link" href="#contacto">Escribir ahora →</a>
-        </div>
+
         <div class="servicio">
           <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <circle cx="6" cy="6" r="2.3" />
@@ -152,15 +135,14 @@
           </svg>
           <h3>Red de aliados y alianzas</h3>
           <p>Cámaras de comercio, fondos, laboratorios y organizaciones que abren puertas a tu proyecto.</p>
-          <a class="link" href="#">Ver aliados →</a>
         </div>
+
         <div class="servicio">
           <svg class="icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
             <path d="M4 20V10M12 20V4M20 20v-7" />
           </svg>
           <h3>Sinapsis Day</h3>
           <p>El evento insignia del centro: emprendedores UAO frente a jurado, inversionistas y comunidad.</p>
-          <a class="link" href="#">Ver última edición →</a>
         </div>
       </div>
     </div>
@@ -203,64 +185,49 @@
   </section>
 
   <section id="contacto">
-    <!-- (Mismo código de tu sección de contacto y el footer) -->
     <div class="wrap">
       <div class="section-head">
         <div class="eyebrow"><span class="nodo"></span><span>Contacto</span></div>
         <h2>Hablemos de tu idea</h2>
-        <p>Elige el canal que prefieras — todos llegan al mismo equipo.</p>
       </div>
-      <div class="contacto-grid">
-        <div class="contacto-card">
-          <h3>Chat directo por WhatsApp</h3>
-          <p>Cuéntanos en qué etapa está tu proyecto y un asesor te responde el mismo día, sin formularios.</p>
-          <a class="btn btn-primary" href="https://wa.me/573000000000" target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" />
-            </svg>
-            Abrir WhatsApp
-          </a>
+    
+      <div class="info-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; padding-top: 10px;">
+        <div class="info-item">
+          <span class="nodo"></span>
+          <div>
+            <h4>Teléfono</h4>
+            <p>(57) (2) 318 8000<br>Línea gratuita 01 8000 91 34 35<br>ext. 11046</p>
+          </div>
         </div>
-        <div class="info-list">
-          <div class="info-item">
-            <span class="nodo"></span>
-            <div>
-              <h4>Teléfono</h4>
-              <p>(57) (2) 318 8000 · Línea gratuita 01 8000 91 34 35, ext. 11046</p>
-            </div>
+        <div class="info-item">
+          <span class="nodo"></span>
+          <div>
+            <h4>Correo</h4>
+            <p><a href="mailto:sinapsis@uao.edu.co" style="color: var(--tinta); font-weight: 600;">sinapsis@uao.edu.co</a></p>
           </div>
-          <div class="info-item">
-            <span class="nodo"></span>
-            <div>
-              <h4>Correo</h4>
-              <p><a href="mailto:sinapsis@uao.edu.co">sinapsis@uao.edu.co</a></p>
-            </div>
+        </div>
+        <div class="info-item">
+          <span class="nodo"></span>
+          <div>
+            <h4>Ubicación</h4>
+            <p>Campus Valle del Lili,<br>Universidad Autónoma de Occidente, Cali</p>
           </div>
-          <div class="info-item">
-            <span class="nodo"></span>
-            <div>
-              <h4>Ubicación</h4>
-              <p>Campus Valle del Lili, Universidad Autónoma de Occidente, Cali</p>
-            </div>
-          </div>
-          <div class="info-item">
-            <span class="nodo"></span>
-            <div>
-              <h4>Redes</h4>
-              <p><a href="#">Instagram</a> · <a href="#">Facebook</a> · <a href="#">YouTube</a></p>
-            </div>
+        </div>
+        <div class="info-item">
+          <span class="nodo"></span>
+          <div>
+            <h4>Redes</h4>
+            <p>
+              <a href="#" style="color: var(--tinta); font-weight: 600;">Instagram</a> · 
+              <a href="#" style="color: var(--tinta); font-weight: 600;">Facebook</a> · 
+              <a href="#" style="color: var(--tinta); font-weight: 600;">YouTube</a>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <a class="wa-float" href="https://wa.me/573000000000" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" />
-    </svg>
-    Escríbenos
-  </a>
 
   <footer>
     <div class="wrap">

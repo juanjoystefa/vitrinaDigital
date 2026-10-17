@@ -34,30 +34,34 @@ def perfil_usuario(request):
 # ==========================================
 
 def inicio(request):
-    # CREATE Y READ PÚBLICO
+    # READ: Solo muestra la vitrina pública
+    emprendimientos = Emprendimiento.objects.filter(estado='activo').order_by("-totalVistas")
+    return render(request, "emprendimientos/emprendimientos.html", {
+        "emprendimientos": emprendimientos,
+    })
+
+@login_required
+def crear_emprendimiento(request):
+    # CREATE: Lógica exclusiva para crear un nuevo proyecto
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            return redirect("login")
-            
-        # AGREGAMOS request.FILES para recibir la imagen al crear
+        # Importante: request.FILES para recibir el logo
         form = EmprendimientoForm(request.POST, request.FILES) 
         if form.is_valid():
             emprendimiento = form.save(commit=False)
             emprendimiento.creador = request.user 
             emprendimiento.save()
             
+            # Si era visitante, sube de nivel
             if request.user.perfil.rol == 'visitante':
                 request.user.perfil.rol = 'emprendedor'
                 request.user.perfil.save()
                 
-            return redirect("emprendimientos") 
+            # Lo enviamos a su perfil para que vea que quedó en estado 'pendiente'
+            return redirect("perfil") 
     else:
         form = EmprendimientoForm()
         
-    emprendimientos = Emprendimiento.objects.filter(estado='activo').order_by("-totalVistas")
-
-    return render(request, "emprendimientos/emprendimientos.html", {
-        "emprendimientos": emprendimientos,
+    return render(request, "emprendimientos/crear_emprendimiento.html", {
         "form": form,
     })
 

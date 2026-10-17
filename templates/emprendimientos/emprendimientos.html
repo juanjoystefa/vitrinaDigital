@@ -4,21 +4,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitrina Digital</title>
-
-    <!-- 1. Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- 2. Bootstrap 5 -->
+    <title>Red de Emprendimientos - Sinapsis</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- 3. Variables de diseño globales -->
     <link rel="stylesheet" href="{% static 'css/stylesLanding.css' %}">
-
-    <!-- 4. Estilos de la navbar (se cargan al final para que tengan prioridad sobre Bootstrap) -->
     <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}">
 </head>
 
@@ -26,44 +16,64 @@
 
     {% include 'includes/navbar.html' %}
 
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Vitrina de Emprendimientos</h1>
+    <div class="container mt-5 mb-5 wrap">
+        <!-- Cabecera y Botón para agregar -->
+        <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+            <div>
+                <div class="eyebrow"><span class="nodo"></span><span>Comunidad UAO</span></div>
+                <h2 style="color: var(--tinta); font-weight: 800; font-size: 32px;">Red de Emprendimientos</h2>
+            </div>
 
-        <!-- Formulario Básico -->
-        <div class="card shadow-sm p-4 mb-5">
-            <h5 class="mb-3">Añadir Emprendimiento</h5>
-            <form method="POST">
-                {% csrf_token %} <!-- Django exige esto por seguridad en todos los formularios -->
-                <div class="input-group">
-                    {{ form.nombre }}
-                    <button type="submit" class="btn btn-primary">Registrar</button>
-                </div>
-            </form>
+            <a href="{% url 'crear_emprendimiento' %}" class="btn"
+                style="background-color: var(--rojo); color: white; border-radius: 999px; font-weight: 600; padding: 12px 24px;">
+                + Publicar el mío
+            </a>
         </div>
 
-        <!-- Grilla de 3 elementos por fila -->
-        <div class="row g-4">
+        <!-- Grilla de Emprendimientos (Tarjetas fijas de 300px) -->
+        <div class="d-flex flex-wrap justify-content-center gap-4">
             {% for emp in emprendimientos %}
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center d-flex flex-column">
-                        <h4 class="card-title text-primary">{{ emp.nombre }}</h4>
-                        <p class="card-text mt-3">
-                            <span class="badge bg-success fs-6">
-                                Visitas: {{ emp.totalVistas }}
-                            </span>
-                        </p>
-                        <!-- Este es el botón nuevo. Fíjate en el href -->
-                        <a href="{% url 'registrar_visita' emp.idEmprendimiento %}"
-                            class="btn btn-outline-primary mt-auto">
-                            Ver Emprendimiento
+
+            <!-- Forzamos la tarjeta a exactamente 300px de ancho -->
+            <div class="emp-card shadow-sm" style="width: 300px; flex: none; display: flex; flex-direction: column;">
+
+                <!-- Portada / Logo (Exactamente 300px por 300px) -->
+                <div class="emp-cover"
+                    style="width: 100%; height: 300px; background-color: #ffffff; border-bottom: 1px solid var(--borde); overflow: hidden; padding: 25px;">
+                    {% if emp.logo %}
+                    <img src="{{ emp.logo.url }}" alt="Logo {{ emp.nombre }}"
+                        style="width: 100%; height: 100%; object-fit: contain; object-position: center;">
+                    {% else %}
+                    <!-- Inicial gigante si no hay logo -->
+                    <div
+                        style="width: 100%; height: 100%; background-color: var(--tinta); display: flex; align-items: center; justify-content: center; font-size: 100px; color: white; border-radius: 12px;">
+                        {{ emp.nombre|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Cuerpo de la tarjeta -->
+                <div class="emp-body" style="flex-grow: 1;">
+                    <span class="emp-cat">Activo</span>
+                    <h4 style="color: var(--tinta);">{{ emp.nombre }}</h4>
+                    <p>{{ emp.descripcion|truncatechars:90|default:"Este emprendimiento aún no tiene descripción." }}
+                    </p>
+
+                    <div class="emp-actions justify-content-center">
+                        <a href="" class="btn"
+                            style="background-color: var(--tinta); color: white; border-radius: 8px; font-weight: 600; border: none; padding-left: 35px; padding-right: 35px;">
+                            Conocer más
                         </a>
                     </div>
                 </div>
+
+
+
             </div>
+
             {% empty %}
-            <div class="col-12">
-                <p class="text-center text-muted">Aún no hay emprendimientos. ¡Agrega el primero!</p>
+            <div class="col-12 text-center py-5 w-100">
+                <h5 class="text-muted">Aún no hay emprendimientos activos. ¡Sé el primero en la red!</h5>
             </div>
             {% endfor %}
         </div>

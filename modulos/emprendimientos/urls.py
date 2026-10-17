@@ -15,6 +15,7 @@ urlpatterns = [
 
     # Rutas Públicas
     path("emprendimientos/", views.inicio, name="emprendimientos"),
+    path("emprendimientos/crear/", views.crear_emprendimiento, name="crear_emprendimiento"),
     path("emprendimientos/editar/<int:id>/", views.editar_emprendimiento, name="editar_emprendimiento"),
     path("emprendimientos/eliminar/<int:id>/", views.eliminar_emprendimiento, name="eliminar_emprendimiento"),
     path('emprendimientos/estado/<int:id>/<str:nuevo_estado>/', views.cambiar_estado_emprendimiento, name='cambiar_estado_emprendimiento'),

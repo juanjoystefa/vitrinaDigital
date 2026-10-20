@@ -40,6 +40,13 @@ def inicio(request):
         "emprendimientos": emprendimientos,
     })
 
+def detalle_emprendimiento(request, id):
+    # Carga la página individual del emprendimiento
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id, estado='activo')
+    return render(request, "emprendimientos/detalle_emprendimiento.html", {
+        "emprendimiento": emprendimiento
+    })
+
 @login_required
 def crear_emprendimiento(request):
     # CREATE: Lógica exclusiva para crear un nuevo proyecto
@@ -115,7 +122,8 @@ def registrar_visita(request, id, origen='general'):
     elif origen == 'ig' and emprendimiento.link_instagram:
         return redirect(emprendimiento.link_instagram)
         
-    return redirect('inicio')
+    # Cambio: Ahora la visita general redirige al perfil público del emprendimiento
+    return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
 
 
 # ==========================================

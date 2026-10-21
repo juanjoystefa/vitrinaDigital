@@ -272,6 +272,25 @@
                                     <span style="font-size: 13px; color: #999;">Consultar precio</span>
                                 {% endif %}
                             </div>
+
+                            <!-- Botones de Editar y Eliminar (Solo visibles para el creador) -->
+                            {% if request.user.is_authenticated and request.user == emprendimiento.creador %}
+                            <div style="display: flex; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #EAD9C9;">
+                                
+                                <a href="{% url 'editar_producto' producto.idProducto %}" class="btn" style="flex: 1; padding: 6px; font-size: 13px; font-weight: 600; background-color: var(--borde); color: var(--tinta); border-radius: 6px;">
+                                    Editar
+                                </a>
+                                
+                                <form action="{% url 'eliminar_producto' producto.idProducto %}" method="POST" style="flex: 1; margin: 0;" onsubmit="return confirm('¿Seguro que deseas eliminar el producto {{ producto.nombre }}?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn w-100" style="padding: 6px; font-size: 13px; font-weight: 600; background-color: var(--rojo); color: white; border-radius: 6px;">
+                                        Eliminar
+                                    </button>
+                                </form>
+                                
+                            </div>
+                            {% endif %}
+
                         </div>
 
                     </div>

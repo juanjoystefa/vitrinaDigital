@@ -6,8 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 class EmprendimientoForm(forms.ModelForm):
     class Meta:
         model = Emprendimiento
-        # 1. Agregamos los nuevos campos a la lista
-        fields = ["nombre", "descripcion", "link_whatsapp", "link_instagram", "logo"]
+        # 1. Agregamos 'estado_terremoto' a la lista
+        fields = ["nombre", "descripcion", "link_whatsapp", "link_instagram", "logo", "estado_terremoto"]
         
         # 2. Personalizamos las etiquetas (Lo que lee el usuario)
         labels = {
@@ -15,10 +15,11 @@ class EmprendimientoForm(forms.ModelForm):
             'descripcion': 'Descripción del proyecto',
             'link_whatsapp': 'Número de WhatsApp',
             'link_instagram': 'Enlace de Instagram',
-            'logo': 'Logotipo o Imagen'
+            'logo': 'Logotipo o Imagen',
+            'estado_terremoto': 'Estado actual tras el sismo'
         }
         
-        # 3. Asignamos clases de Bootstrap y textos de ejemplo (placeholders)
+        # 3. Asignamos clases de Bootstrap
         widgets = {
             'nombre': forms.TextInput(attrs={
                 'class': 'form-control', 
@@ -38,6 +39,10 @@ class EmprendimientoForm(forms.ModelForm):
                 'placeholder': 'Ej: https://instagram.com/tu_cuenta'
             }),
             'logo': forms.ClearableFileInput(attrs={
+                'class': 'form-control'
+            }),
+            # Agregamos la clase de Bootstrap al selector desplegable
+            'estado_terremoto': forms.Select(attrs={
                 'class': 'form-control'
             })
         }

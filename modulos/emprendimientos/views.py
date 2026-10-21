@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import Emprendimiento, Vistas, Perfil
+from .models import Emprendimiento, Vistas, Perfil, Productos
 from .forms import EmprendimientoForm, RegistroForm, ProductoForm
 
 # ==========================================
@@ -161,6 +161,39 @@ def crear_producto(request, id_emprendimiento):
         "emprendimiento": emprendimiento
     })
 
+@login_required
+def editar_producto(request, id_producto):
+    producto = get_object_or_404(Productos, idProducto=id_producto)
+    emprendimiento = producto.idEmprendimiento
+    
+    # Seguridad: Solo el dueño o un admin pueden editar
+    if request.user != emprendimiento.creador and request.user.perfil.rol != 'admin':
+        return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+
+    if request.method == "POST":
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+    else:
+        form = ProductoForm(instance=producto)
+
+    return render(request, "emprendimientos/editar_producto.html", {
+        "form": form,
+        "producto": producto,
+        "emprendimiento": emprendimiento
+    })
+
+@login_required
+def eliminar_producto(request, id_producto):
+    producto = get_object_or_404(Productos, idProducto=id_producto)
+    emprendimiento = producto.idEmprendimiento
+
+    # Seguridad: Solo el dueño o un admin pueden eliminar
+    if request.user == emprendimiento.creador or request.user.perfil.rol == 'admin':
+        producto.delete()
+        
+    return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
 
 # ==========================================
 # 3. PANEL DE ADMINISTRACIÓN

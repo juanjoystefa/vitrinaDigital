@@ -19,6 +19,7 @@ urlpatterns = [
     path("emprendimientos/<int:id>/", views.detalle_emprendimiento, name="detalle_emprendimiento"),
     path("emprendimientos/crear/", views.crear_emprendimiento, name="crear_emprendimiento"),
     path("emprendimientos/editar/<int:id>/", views.editar_emprendimiento, name="editar_emprendimiento"),
+    path("emprendimientos/<int:id>/personalizar/", views.personalizar_emprendimiento, name="personalizar_emprendimiento"),
     path("emprendimientos/eliminar/<int:id>/", views.eliminar_emprendimiento, name="eliminar_emprendimiento"),
     path('emprendimientos/estado/<int:id>/<str:nuevo_estado>/', views.cambiar_estado_emprendimiento, name='cambiar_estado_emprendimiento'),
 

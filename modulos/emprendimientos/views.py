@@ -113,6 +113,27 @@ def editar_emprendimiento(request, id):
     })
 
 @login_required
+def personalizar_emprendimiento(request, id):
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)
+    
+    # Seguridad: Solo el dueño puede personalizar
+    if request.user != emprendimiento.creador:
+        return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+
+    if request.method == 'POST':
+        # Capturamos los colores del formulario
+        emprendimiento.color_principal = request.POST.get('color_principal', '#8A1428')
+        emprendimiento.color_fondo = request.POST.get('color_fondo', '#f8f9fa')
+        emprendimiento.save()
+        
+        # Redirigimos a la vitrina para que vea el resultado real
+        return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+
+    return render(request, "emprendimientos/personalizar_emprendimiento.html", {
+        "emprendimiento": emprendimiento
+    })
+
+@login_required
 def eliminar_emprendimiento(request, id):
     # DELETE
     emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id)

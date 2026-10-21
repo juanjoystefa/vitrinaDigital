@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Personalizar - {{ emprendimiento.nombre }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}">
+    
+    <style>
+        body { background-color: #FBF5EC; font-family: 'DM Sans', sans-serif; }
+        
+        .editor-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* --- ESTILOS DEL PANEL IZQUIERDO --- */
+        .panel-control {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #EAD9C9;
+            height: fit-content;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Selector de color nativo estilizado */
+        input[type="color"] {
+            -webkit-appearance: none;
+            appearance: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: 2px solid #EAD9C9; border-radius: 10px; }
+
+        /* --- ESTILOS DEL MOCKUP DERECHO --- */
+        .mockup-wrapper {
+            background: #e6dfd5;
+            padding: 40px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* El contenedor de vista previa usará estas variables que JS va a modificar */
+        #vista-previa {
+            --mock-principal: {{ emprendimiento.color_principal }};
+            --mock-fondo: {{ emprendimiento.color_fondo }};
+            
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--mock-fondo);
+            border-radius: 12px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: background-color 0.2s ease;
+            pointer-events: none; /* Desactiva clics en la vista previa */
+        }
+
+        .mock-sidebar { background: #fff; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--mock-principal); transition: border-color 0.2s; }
+        .mock-logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--mock-principal); margin: 0 auto 15px; background: var(--mock-principal); transition: background 0.2s, border-color 0.2s; }
+        .mock-btn { width: 100%; padding: 8px; border-radius: 6px; color: white; font-size: 12px; font-weight: bold; margin-top: 10px; opacity: 0.9; }
+        .mock-btn-wa { background-color: #1b9748; }
+        .mock-btn-ig { background-color: #a7224e; }
+        
+        .mock-main { background: #fff; border-radius: 12px; padding: 25px; border: 1px solid var(--mock-principal); transition: border-color 0.2s; }
+        .mock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .mock-prod { border: 1px solid var(--mock-principal); border-radius: 8px; height: 120px; padding: 10px; display: flex; flex-direction: column; justify-content: flex-end; transition: border-color 0.2s; }
+        .mock-title { color: var(--mock-principal); font-weight: 800; font-size: 14px; transition: color 0.2s; }
+
+        @media (max-width: 900px) {
+            .editor-container { grid-template-columns: 1fr; }
+            #vista-previa { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <div class="editor-container">
+        
+        <!-- PANEL IZQUIERDO: Controles -->
+        <div class="panel-control shadow-sm">
+            <h3 style="color: #8A1428; margin-bottom: 10px; font-weight: 800;">Identidad Visual</h3>
+            <p class="text-muted small mb-4">Personaliza los colores de tu vitrina para que coincidan con tu marca.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <label class="fw-bold mb-2">Color Principal (Acento)</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="input_principal" name="color_principal" value="{{ emprendimiento.color_principal }}">
+                    <span class="small text-muted">Afecta títulos, botones y destacados.</span>
+                </div>
+
+                <label class="fw-bold mb-2">Color de Fondo</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="input_fondo" name="color_fondo" value="{{ emprendimiento.color_fondo }}">
+                    <span class="small text-muted">Fondo detrás de las tarjetas. Úsalo claro.</span>
+                </div>
+
+                <div class="alert alert-light border mb-4" style="font-size: 13px;">
+                    💡 <b>¿No sabes qué colores elegir?</b><br>
+                    Explora y descubre combinaciones perfectas en <a href="https://paletadecolores.org/crear-paleta.html" target="_blank" style="color: #8A1428; font-weight: 600;">Paleta de Colores org</a>.
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'detalle_emprendimiento' emprendimiento.idEmprendimiento %}" class="btn btn-outline-secondary w-50" style="border-radius: 999px;">Cancelar</a>
+                    <button type="submit" class="btn w-50" style="background-color: #8A1428; color: white; border-radius: 999px; font-weight: 600;">Aplicar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- PANEL DERECHO: Vista Previa en tiempo real -->
+        <div class="mockup-wrapper shadow-sm">
+            <div id="vista-previa">
+                
+                <!-- Mockup Sidebar -->
+                <div class="mock-sidebar">
+                    <div class="mock-logo"></div>
+                    <div style="height: 16px; width: 80%; background: var(--mock-principal); margin: 0 auto 10px; border-radius: 4px;"></div>
+                    <div style="height: 10px; width: 60%; background: #ccc; margin: 0 auto 30px; border-radius: 4px;"></div>
+                    
+                    <div style="height: 10px; width: 100%; background: #eee; margin-bottom: 10px;"></div>
+                    <div class="mock-btn mock-btn-wa">WhatsApp</div>
+                    <div class="mock-btn mock-btn-ig">Instagram</div>
+                </div>
+
+                <!-- Mockup Main -->
+                <div class="mock-main">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="height: 24px; width: 120px; background: var(--mock-principal); border-radius: 4px;"></div>
+                        <div style="height: 30px; width: 150px; border: 1px solid #ccc; border-radius: 15px;"></div>
+                    </div>
+
+                    <div class="mock-grid">
+                        <div class="mock-prod">
+                            <div class="mock-title">Producto 1</div>
+                            <div style="height: 12px; width: 40px; background: #333; margin-top: 5px; border-radius: 2px;"></div>
+                        </div>
+                        <div class="mock-prod">
+                            <div class="mock-title">Producto 2</div>
+                            <div style="height: 12px; width: 40px; background: #333; margin-top: 5px; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT PARA ACTUALIZAR COLORES EN TIEMPO REAL -->
+    <script>
+        const inputPrincipal = document.getElementById('input_principal');
+        const inputFondo = document.getElementById('input_fondo');
+        const vistaPrevia = document.getElementById('vista-previa');
+
+        // Cuando el usuario mueva el selector, actualizamos la variable CSS de la vista previa
+        inputPrincipal.addEventListener('input', function(e) {
+            vistaPrevia.style.setProperty('--mock-principal', e.target.value);
+        });
+
+        inputFondo.addEventListener('input', function(e) {
+            vistaPrevia.style.setProperty('--mock-fondo', e.target.value);
+        });
+    </script>
+</body>
+</html>

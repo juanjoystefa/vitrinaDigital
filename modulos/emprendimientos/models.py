@@ -58,6 +58,9 @@ class Emprendimiento(models.Model):
     vistas_wa = models.IntegerField(default=0)
     vistas_ig = models.IntegerField(default=0)
     vistas_web = models.IntegerField(default=0)
+    # Configuración visual personalizada
+    color_principal = models.CharField(max_length=7, default='#8A1428') # Rojo UAO por defecto
+    color_fondo = models.CharField(max_length=7, default='#f8f9fa')     # Gris muy claro por defecto
 
     def __str__(self):
         return self.nombre

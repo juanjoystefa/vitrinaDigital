@@ -11,9 +11,10 @@
     <!-- CSS INCORPORADO PARA ESTA VISTA (Base para futura personalización) -->
     <style>
         :root {
-            /* Variables globales por defecto, luego las cambiaremos por base de datos */
-            --emp-color-principal: #8A1428; 
-            --emp-color-fondo: #f8f9fa;
+            /* Ahora las variables se llenan con los datos de la BD */
+            --emp-color-principal: {{ emprendimiento.color_principal|default:"#8A1428" }}; 
+            --emp-color-fondo: {{ emprendimiento.color_fondo|default:"#f8f9fa" }};
+            --emp-borde: var(--emp-color-principal); 
         }
 
         body {
@@ -36,7 +37,7 @@
             border-radius: 16px;
             padding: 30px 20px;
             text-align: center;
-            border: 1px solid #EAD9C9;
+            border: 1px solid var(--emp-borde);
             height: fit-content;
         }
 
@@ -44,7 +45,7 @@
             width: 160px;
             height: 160px;
             border-radius: 50%;
-            border: 2px solid #EAD9C9;
+            border: 2px solid var(--emp-borde);
             margin: 0 auto 20px auto;
             overflow: hidden;
             background-color: #fff;
@@ -87,7 +88,7 @@
             text-align: left;
             margin-top: 30px;
             margin-bottom: 15px;
-            border-bottom: 1px solid #EAD9C9;
+            border-bottom: 1px solid var(--emp-borde);
             padding-bottom: 5px;
         }
 
@@ -112,7 +113,7 @@
             background: #fff;
             border-radius: 16px;
             padding: 40px;
-            border: 1px solid #EAD9C9;
+            border: 1px solid var(--emp-borde);
         }
 
         .buscador-container {
@@ -230,11 +231,17 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <h3 style="color: var(--emp-color-principal); margin-bottom: 0; font-weight: 800;">Catálogo</h3>
                 
-                <!-- Este botón SOLO le aparecerá al dueño del emprendimiento -->
+                <!-- Botones del dueño -->
                 {% if request.user.is_authenticated and request.user == emprendimiento.creador %}
+                <div class="d-flex gap-2">
+                    <a href="{% url 'personalizar_emprendimiento' emprendimiento.idEmprendimiento %}" class="btn shadow-sm" style="background-color: #fff; color: var(--emp-color-principal); border: 1px solid var(--emp-color-principal); border-radius: 999px; font-weight: 600; padding: 10px 20px; font-size: 14px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; margin-top: -2px;"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                        Diseño
+                    </a>
                     <a href="{% url 'crear_producto' emprendimiento.idEmprendimiento %}" class="btn shadow-sm" style="background-color: var(--emp-color-principal); color: white; border-radius: 999px; font-weight: 600; padding: 10px 20px; font-size: 14px;">
                         + Añadir Producto
                     </a>
+                </div>
                 {% endif %}
             </div>
 
@@ -242,7 +249,7 @@
             <div class="productos-grid">
                 {% for producto in productos %}
                     <!-- Tarjeta de Producto Real -->
-                    <div style="border: 1px solid #EAD9C9; border-radius: 12px; overflow: hidden; background-color: white; display: flex; flex-direction: column;">
+                    <div style="border: 1px solid var(--emp-borde); border-radius: 12px; overflow: hidden; background-color: white; display: flex; flex-direction: column;">
                         
                         <!-- Imagen del producto (si la tiene) -->
                         <div style="height: 160px; background-color: #fafafa; border-bottom: 1px solid #EAD9C9;">

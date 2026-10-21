@@ -1,5 +1,5 @@
 from django import forms
-from .models import Emprendimiento
+from .models import Emprendimiento, Productos
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -54,3 +54,20 @@ class RegistroForm(UserCreationForm):
         # Añadir las clases de Bootstrap a los campos por defecto del UserCreationForm
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Productos
+        fields = ["nombre", "descripcion", "precio", "imagen"]
+        labels = {
+            'nombre': 'Nombre del Producto',
+            'descripcion': 'Descripción breve',
+            'precio': 'Precio ($)',
+            'imagen': 'Foto del producto'
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: Camiseta Estampada'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Detalles del producto...'}),
+            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ej: 50000', 'step': '0.01'}),
+            'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'})
+        }

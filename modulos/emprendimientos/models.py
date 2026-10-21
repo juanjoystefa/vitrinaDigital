@@ -34,6 +34,11 @@ class Emprendimiento(models.Model):
         ('activo', 'Activo'),
         ('rechazado', 'Rechazado'),
     )
+
+    ESTADOS_TERREMOTO = (
+        ('afectado', 'Afectado'),
+        ('no_afectado', 'No afectado'),
+    )
     
     idEmprendimiento = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
@@ -41,6 +46,7 @@ class Emprendimiento(models.Model):
     creador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="emprendimientos")
     
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
+    estado_terremoto = models.CharField(max_length=20, choices=ESTADOS_TERREMOTO, default='no_afectado')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     # Redes sociales / Enlaces de contacto
@@ -60,7 +66,6 @@ class Emprendimiento(models.Model):
 # 3. Modelo de Vistas actualizado con desglose por canal
 class Vistas(models.Model):
     ORIGEN_CHOICES = (
-        ('general', 'Vista a la tarjeta'),
         ('wa', 'Clic a WhatsApp'),
         ('ig', 'Clic a Instagram'),
         ('web', 'Clic a Página Web'),
@@ -69,7 +74,7 @@ class Vistas(models.Model):
     idVisita = models.AutoField(primary_key=True)
     fechaHora = models.DateTimeField(auto_now_add=True)
     idEmprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name="Vistas")
-    origen = models.CharField(max_length=20, choices=ORIGEN_CHOICES, default='general')
+    origen = models.CharField(max_length=20, choices=ORIGEN_CHOICES, default='web')
 
     def save(self, *args, **kwargs):
         es_nuevo = self.pk is None
@@ -89,3 +94,15 @@ class Vistas(models.Model):
                 self.idEmprendimiento.vistas_web += 1
                 
             self.idEmprendimiento.save()
+
+
+class Productos(models.Model):
+    idProducto = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(blank=True, null=True, max_length=1000)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    idEmprendimiento = models.ForeignKey(Emprendimiento, on_delete=models.CASCADE, related_name="productos")
+    imagen = models.ImageField(upload_to='emprendimientos/productos/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.nombre} - {self.idEmprendimiento.nombre}"

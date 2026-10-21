@@ -107,6 +107,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-co'
 
+# Asegúrate de que Django use formatos locales
+USE_L10N = True 
+
+# Dile a Django que active los separadores de miles visualmente
+USE_THOUSAND_SEPARATOR = True
+
 TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True

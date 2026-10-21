@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .models import Emprendimiento, Vistas, Perfil
-from .forms import EmprendimientoForm, RegistroForm
+from .forms import EmprendimientoForm, RegistroForm, ProductoForm
 
 # ==========================================
 # 1. USUARIOS Y AUTENTICACIÓN
@@ -35,7 +35,8 @@ def perfil_usuario(request):
 
 def inicio(request):
     # READ: Solo muestra la vitrina pública
-    emprendimientos = Emprendimiento.objects.filter(estado='activo').order_by("-totalVistas")
+    # Ordena primero por los afectados, y luego por los que tienen más vistas
+    emprendimientos = Emprendimiento.objects.filter(estado='activo').order_by("estado_terremoto", "-totalVistas")
     return render(request, "emprendimientos/emprendimientos.html", {
         "emprendimientos": emprendimientos,
     })
@@ -43,8 +44,19 @@ def inicio(request):
 def detalle_emprendimiento(request, id):
     # Carga la página individual del emprendimiento
     emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id, estado='activo')
+    
+    # Buscamos los productos vinculados a este emprendimiento específico
+    mis_productos = emprendimiento.productos.all()
+    
+    # Lógica del buscador de productos
+    query = request.GET.get('q', '')
+    if query:
+        mis_productos = mis_productos.filter(nombre__icontains=query)
+        
     return render(request, "emprendimientos/detalle_emprendimiento.html", {
-        "emprendimiento": emprendimiento
+        "emprendimiento": emprendimiento,
+        "productos": mis_productos,
+        "query": query
     })
 
 @login_required
@@ -124,6 +136,30 @@ def registrar_visita(request, id, origen='general'):
         
     # Cambio: Ahora la visita general redirige al perfil público del emprendimiento
     return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+
+@login_required
+def crear_producto(request, id_emprendimiento):
+    emprendimiento = get_object_or_404(Emprendimiento, idEmprendimiento=id_emprendimiento)
+    
+    # Seguridad: Verificamos que SOLO el dueño del emprendimiento pueda agregar productos
+    if request.user != emprendimiento.creador:
+        return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+
+    if request.method == "POST":
+        # request.FILES es indispensable para recibir la foto del producto
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            producto = form.save(commit=False)
+            producto.idEmprendimiento = emprendimiento # Lo vinculamos a este emprendimiento
+            producto.save()
+            return redirect('detalle_emprendimiento', id=emprendimiento.idEmprendimiento)
+    else:
+        form = ProductoForm()
+
+    return render(request, "emprendimientos/crear_producto.html", {
+        "form": form,
+        "emprendimiento": emprendimiento
+    })
 
 
 # ==========================================
